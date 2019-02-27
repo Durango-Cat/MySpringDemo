@@ -1,7 +1,7 @@
 package main.atziji.guava.test.optional;
 
 import com.google.common.base.Optional;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Set;
 

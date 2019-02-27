@@ -2,7 +2,7 @@ package main.atziji.guava.test.common.base;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.FileWriter;
 import java.io.IOException;

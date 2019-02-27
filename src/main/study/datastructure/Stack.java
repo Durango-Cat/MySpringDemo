@@ -1,5 +1,8 @@
 package main.study.datastructure;
 
+import org.junit.Test;
+
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import static java.lang.System.*;
@@ -18,7 +21,7 @@ public class Stack {
      * 用下压栈（数组）的物理结构方式实现栈
      * 优点：快速遍历 O(1)
      */
-     public class StackByStackImpl {
+     public class StackByArrayImpl {
         /**
          * 暂定简单的Integer类型的数组当做这个栈,如果数组中未存值就将数组默认里面填充null
          */
@@ -57,7 +60,7 @@ public class Stack {
          * 向栈中添加元素，支持容量不够扩容
          * @param item  待添加的元素
          */
-        public void add(int item) {
+        public void push(int item) {
             if((size + 1) == items.length) {
                 resize(size * 2);
             }
@@ -68,58 +71,56 @@ public class Stack {
         /**
          * 删除元素
          */
-        Integer delete() {
+        Integer pop() {
             if(isEmpty()) {
                 log.info("栈为空，不支持删除操作");
                 return null;
             }
 
-            if((size - 1) == items.length/4) {
+            Integer delteItem = null;
+            if (items[--size] != null) {
+                delteItem = items[size];
+                items[size] = null;
+            }
+
+            if((size) == items.length/4) {
                 resize(items.length/2);
             }
-
-            Integer delteItem = null;
-            if (items[size - 1] != null) {
-                delteItem = items[size - 1];
-                items[size - 1] = null;
-                this.size--;
-            }
-
             return delteItem;
-        }
-
-        /**
-         * 查找items集合中某个元素
-         *
-         * @param index  待查找元素的索引位置
-         */
-        public Integer findItem(int index) {
-            if(isEmpty()) {
-                log.info("栈为空，该值不存在");
-                return null;
-            }
-
-            return items[index];
         }
 
         /**
          * 遍历栈
          */
-        Integer[] ergodic() {
-            if(isEmpty()) {
-                log.info("栈为空，该值不存在");
-                return null;
-            }
-
-            Integer[] newItems = new Integer[size];
-            arraycopy(items, 0, newItems, 0, size - 1 + 1);
-           return newItems;
+        public Iterator<Integer> iterator() {
+            return new ReverseArray();
         }
         /**
          * 栈的大小
          */
         public int size() {
             return this.size;
+        }
+
+        /**
+         * 遍历数组
+         */
+        public class ReverseArray implements Iterator<Integer> {
+
+            private int i = size;
+
+            @Override
+            public boolean hasNext() {
+                return i > 0;
+            }
+
+            /**
+             * 这个里面有下标移动的操作
+             */
+            @Override
+            public Integer next() {
+                return items[--i];
+            }
         }
     }
 
@@ -130,9 +131,9 @@ public class Stack {
     public class StackByLinkImpl {
 
         /**
-         * 第一个链表元素
+         * 栈顶元素
          */
-        private StackByLink first = null;
+        private Node first = null;
         /**
          * 元素数量
          */
@@ -140,7 +141,7 @@ public class Stack {
         /**
          * 链表
          */
-        class StackByLink {
+        class Node {
             /**
              * 当前元素
              */
@@ -148,61 +149,40 @@ public class Stack {
             /**
              * 存储下一个元素的
              */
-            StackByLink next = null;
+            Node next = null;
 
-            public StackByLink() {
+            public Node() {
             }
 
-            StackByLink(Integer item) {
+            Node(Integer item) {
                 this.item = item;
             }
         }
 
         /**
-         * 添加元素
+         * 向栈顶添加元素
          * @param item 元素值
          */
-        public void add(Integer item) {
-            if(item == null) {
-                return ;
-            }
-            if (first == null) {
-                first = new StackByLink(item);
-            } else {
-                StackByLink next = first;
-                while(next.next != null) {
-                    next = next.next;
-                }
-
-                StackByLink newItem = new StackByLink(item);
-                next.next = newItem;
-            }
+        public void push(Integer item) {
+            Node node = new Node(item);
+            //将新加结点的next指向上一个存放的元素
+            node.next = first;
+            //再将新加结点等于栈顶结点
+            this.first = node;
             this.size++;
         }
 
         /**
-         * 删除链表的最后一个元素，即最后一次添加进来的元素
-         * 即将最后一个元素前面元素的next置为null
+         * 删除栈顶的元素
          */
-        public Integer delete() {
+        public Integer pop() {
             if(first == null) {
-                log.info("该栈为空，无法执行删除操作");
+                log.info("栈为空，无法执行删除操作");
                 return null;
             }
-
-            StackByLink next = first;
-            StackByLink lastNext = null;
-            while (next.next != null) {
-                lastNext = next;
-                next = next.next;
-            }
-
-            Integer item = next.item;
-            if(item != null && lastNext != null) {
-                next.item = null;
-                lastNext.next = null;
-                next = null;
-            }
+            Node secondNode = first.next;
+            Integer item = first.item;
+            first = secondNode;
             this.size--;
             return item;
         }
@@ -217,19 +197,28 @@ public class Stack {
         /**
          * 遍历栈
          */
-        Integer[] ergodic() {
-            Integer[] stacks = null;
-            if(size > 0) {
-                stacks = new Integer[size];
-               int i = size - 1;
-               StackByLink link = first;
-               while(link != null && i >= 0) {
-                       stacks[i] = link.item;
-                       link = link.next;
-                       i--;
-               }
+        public Iterator<Integer> iterator() {
+            return new ReverseStack();
+        }
+
+        /**
+         * 遍历栈
+         */
+        public class ReverseStack implements Iterator<Integer> {
+
+            private Node node = first;
+            @Override
+            public boolean hasNext() {
+                return node != null;
             }
-            return stacks;
+
+            @Override
+            public Integer next() {
+                Integer item = node.item;
+                //向下偏移
+                node = node.next;
+                return item;
+            }
         }
 
         /**
@@ -241,48 +230,27 @@ public class Stack {
     }
 
     /**
-     * 测试
+     * 测试数组方式实现的栈
      */
-    public static void main(String[] args) {
-        //数组的方式实现栈
-        Stack stack = new Stack();
-//        StackByStackImpl stackByStack = stack.new StackByStackImpl();
-//        stackByStack.add(3);
-//        stackByStack.add(45);
-//        out.println(stackByStack.size());
-//        Integer[] items = stackByStack.ergodic();
-//        if(items != null) {
-//            for(int size = items.length - 1, i = size; i >= 0; i--) {
-//                out.print(items[i] + "\t");
-//            }
-//        }
-//        out.println();
-//        stackByStack.delete();
-//        items = stackByStack.ergodic();
-//        if(items != null) {
-//            for(int size = items.length - 1, i = size; i >= 0; i--) {
-//                out.print(items[i] + "\t");
-//            }
-//        }
+    @Test
+    public void testStackByArrayImpl() {
 
-        //链表的方式实现栈
-        StackByLinkImpl stackByLink = stack.new StackByLinkImpl();
-        stackByLink.add(3);
-        stackByLink.add(45);
-        out.println(stackByLink.size());
-        Integer[] links = stackByLink.ergodic();
-        if(links != null) {
-            for(int size = links.length - 1, i = size; i >= 0; i--) {
-                out.print(links[i] + "\t");
-            }
+        //数组的方式实现栈
+        StackByArrayImpl stack = new Stack().new StackByArrayImpl();
+//        链表的方式实现栈
+//        StackByLinkImpl stack = new Stack().new StackByLinkImpl();
+        stack.push(3);
+        stack.push(45);
+        out.println(stack.size());
+        Iterator<Integer> items = stack.iterator();
+        while(items.hasNext()) {
+            out.print(items.next() + "\t");
         }
         out.println();
-        stackByLink.delete();
-        links = stackByLink.ergodic();
-        if(links != null) {
-            for(int size = links.length - 1, i = size; i >= 0; i--) {
-                out.print(links[i] + "\t");
-            }
+        stack.pop();
+        items = stack.iterator();
+        while(items.hasNext()) {
+            out.print(items.next() + "\t");
         }
     }
 }

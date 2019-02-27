@@ -6,7 +6,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.google.common.util.concurrent.MoreExecutors;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.util.Map;
 import java.util.concurrent.Callable;

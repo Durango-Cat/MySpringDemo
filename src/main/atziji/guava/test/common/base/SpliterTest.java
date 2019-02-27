@@ -2,7 +2,7 @@ package main.atziji.guava.test.common.base;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 /**
  * 分割字符串测试
