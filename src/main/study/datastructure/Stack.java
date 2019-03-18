@@ -21,7 +21,7 @@ public class Stack {
      * 用下压栈（数组）的物理结构方式实现栈
      * 优点：快速遍历 O(1)
      */
-     public class StackByArrayImpl {
+     public class StackByArrayImpl implements Structure<Integer> {
         /**
          * 暂定简单的Integer类型的数组当做这个栈,如果数组中未存值就将数组默认里面填充null
          */
@@ -52,7 +52,8 @@ public class Stack {
         /**
          * 是否为空
          */
-        boolean isEmpty() {
+        @Override
+        public boolean empty() {
             return size == 0;
         }
 
@@ -60,7 +61,8 @@ public class Stack {
          * 向栈中添加元素，支持容量不够扩容
          * @param item  待添加的元素
          */
-        public void push(int item) {
+        @Override
+        public void push(Integer item) {
             if((size + 1) == items.length) {
                 resize(size * 2);
             }
@@ -71,8 +73,9 @@ public class Stack {
         /**
          * 删除元素
          */
-        Integer pop() {
-            if(isEmpty()) {
+        @Override
+        public Integer pop() {
+            if(empty()) {
                 log.info("栈为空，不支持删除操作");
                 return null;
             }
@@ -98,6 +101,7 @@ public class Stack {
         /**
          * 栈的大小
          */
+        @Override
         public int size() {
             return this.size;
         }
@@ -125,10 +129,10 @@ public class Stack {
     }
 
     /**
-     * 以链表的方式来实现栈(线性的逻辑结构和链式的物理结构）
+     * 以单链表的方式来实现栈(线性的逻辑结构和链式的物理结构）
      * 优点：增删快，遍历O（n)
      */
-    public class StackByLinkImpl {
+    public class StackBySingleLinkListImpl implements Structure<Integer> {
 
         /**
          * 栈顶元素
@@ -163,6 +167,7 @@ public class Stack {
          * 向栈顶添加元素
          * @param item 元素值
          */
+        @Override
         public void push(Integer item) {
             Node node = new Node(item);
             //将新加结点的next指向上一个存放的元素
@@ -175,6 +180,7 @@ public class Stack {
         /**
          * 删除栈顶的元素
          */
+        @Override
         public Integer pop() {
             if(first == null) {
                 log.info("栈为空，无法执行删除操作");
@@ -190,7 +196,8 @@ public class Stack {
         /**
          * 是否为空
          */
-        public boolean isEmpty() {
+        @Override
+        public boolean empty() {
             return first == null;
         }
 
@@ -224,6 +231,7 @@ public class Stack {
         /**
          * 链表里面数值
          */
+        @Override
         public int size() {
             return this.size;
         }
@@ -237,8 +245,8 @@ public class Stack {
 
         //数组的方式实现栈
         StackByArrayImpl stack = new Stack().new StackByArrayImpl();
-//        链表的方式实现栈
-//        StackByLinkImpl stack = new Stack().new StackByLinkImpl();
+//        单链表的方式实现栈
+//        StackBySingleLinkListImpl stack = new Stack().new StackBySingleLinkListImpl();
         stack.push(3);
         stack.push(45);
         out.println(stack.size());
