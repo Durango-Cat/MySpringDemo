@@ -1,6 +1,8 @@
 package main.atziji.string.test;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -9,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ZhuQiuPing
@@ -238,5 +241,145 @@ public class TestString {
         String a = "Z";
         String b = "C";
         System.out.println(a.compareTo(b));
+    }
+
+    /**
+     * 测试两个布尔值的判断条件
+     */
+    @Test
+    public void testStringNew() {
+        String one = "123";
+        String two = "456";
+
+        Boolean flag = !(Strings.isNullOrEmpty(one) && Strings.isNullOrEmpty(two));
+        System.out.println("两个字符串都不为空" + flag);
+
+        one = "";
+        flag = !(Strings.isNullOrEmpty(one) && Strings.isNullOrEmpty(two));
+        System.out.println("一个字符串为空，另一个字符串不为空" + flag);
+
+        one = "123";
+        two = "";
+        flag = !(Strings.isNullOrEmpty(one) && Strings.isNullOrEmpty(two));
+        System.out.println("一个字符串为空，另一个字符串不为空" + flag);
+
+        one = "";
+        flag = !(Strings.isNullOrEmpty(one) && Strings.isNullOrEmpty(two));
+        System.out.println("两个字符串为空" + flag);
+    }
+
+    @Test
+    public void testDouble() {
+        double bigNum = 2345353453453453445246345634634563463463563563456D;
+        double bigNum2 = 23453534534534534452463456346345634634635635634D;
+        System.out.println((bigNum - bigNum2) * 100 / bigNum2);
+    }
+
+    /**
+     * 比较带有字符串的数据是否一致
+     */
+    @Test
+    public void testCompareStrings() {
+        String str1 = "成功率 ≥ 100 %";
+        String str2 = "成功率 > 90 %";
+        Set<String> strSet = Sets.newHashSet();
+        strSet.add(str1);
+        strSet.add(str2);
+
+        String str3 = "成功率 > 100 %";
+        strSet.add(str3);
+        System.out.println(strSet.size());
+    }
+
+    @Test
+    public void testCompareString() {
+        Object nullStr = "2344234";
+        String one = null;
+        String info = one + "-" + nullStr;
+        String[] infos = info.split("-");
+        System.out.println(infos.length);
+        //BigDecimal bigDecimal = new BigDecimal(0);
+        //System.out.println(bigDecimal.toPlainString());
+
+        //BigDecimal b1 = new BigDecimal(123);
+        //BigDecimal b2 = new BigDecimal(-1);
+        //System.out.println(b1.multiply(b2).toPlainString());
+    }
+
+    @Test
+    public void testList() {
+        List<VisualCondition> visualConditionList = Lists.newArrayList();
+        getConditionList(1, null, "pie.default", 4, visualConditionList);
+        visualConditionList.forEach(System.out::println);
+    }
+
+    List<String> metricAndCalculations = Lists.newArrayList("COUNT", "LATENCY_MSEC",
+            //"RESPONSE_COUNT", "RESPONSE_FAIL_COUNT", "SUCCESS_COUNT",
+            //"FAILED_COUNT", "BUSINESS_SUCCESS_COUNT", "BUSINESS_FAILED_COUNT",
+            "RTT", "TRANS_AMOUNT");
+
+    private void getConditionList(int num, Integer index, String visualType, int showSize, List<VisualCondition> visualConditions) {
+        while (num-- >= 0) {
+            for (int i = 0; i < showSize; i++) {
+                if(num ==0 || index == null) {
+                    index = i;
+                } else {
+                    if (index == i) {
+                        continue;
+                    }
+                }
+                getConditionLists(visualConditions, i, visualType);
+                getConditionList(num, i, visualType, showSize, visualConditions);
+                //if(num == 0) {
+
+                //}
+
+            }
+        }
+    }
+
+    private void getConditionLists(List<VisualCondition> visualConditions, int index, String visualType) {
+        String metric = metricAndCalculations.get(index);
+        visualConditions.add(getConditionInfo(metric, visualType));
+        System.out.println(metric);
+    }
+
+    private VisualCondition getConditionInfo(String metricAndCalculation, String visualType) {
+        VisualCondition visualCondition = new VisualCondition();
+        visualCondition.setMetric(metricAndCalculation);
+        visualCondition.setChartType(visualType.split("\\.")[0]);
+        return visualCondition;
+    }
+
+    private class VisualCondition {
+        private String metric;
+        private String chartType;
+
+        public String getMetric() {
+            return metric;
+        }
+
+        public void setMetric(String metric) {
+            this.metric = metric;
+        }
+
+        public String getChartType() {
+            return chartType;
+        }
+
+        public void setChartType(String chartType) {
+            this.chartType = chartType;
+        }
+
+        public VisualCondition() {
+        }
+
+        @Override
+        public String toString() {
+            return "VisualCondition{" +
+                    "metric='" + metric + '\'' +
+                    ", chartType='" + chartType + '\'' +
+                    '}';
+        }
     }
 }
