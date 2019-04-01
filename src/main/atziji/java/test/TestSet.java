@@ -60,4 +60,20 @@ public class TestSet {
 
         System.out.println(simpleDateFormat.format(d));
     }
+
+    /**
+     * 测试一个空集合是否全部包含在另一个有数值的集合中
+     */
+    @Test
+    public void testSetConstantsAll() {
+        Set<String> hasDataSet = Sets.newHashSet();
+        hasDataSet.add("one");
+        hasDataSet.add("two");
+        hasDataSet.add("three");
+        hasDataSet.add("four");
+        hasDataSet.add("five");
+
+        Set<String> noDataSet = Sets.newHashSet();
+        System.out.println(!hasDataSet.containsAll(noDataSet));
+    }
 }

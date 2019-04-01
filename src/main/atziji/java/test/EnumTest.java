@@ -3,6 +3,8 @@ package main.atziji.java.test;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -12,6 +14,29 @@ import java.util.List;
  *         on 2019/1/11
  */
 public class EnumTest {
+
+    /** 告警级别 */
+    enum AlarmLevel {
+        /** 严重, 高, 中, 低 */
+        EMERGENCY("emergency"),
+        HIGH("high"),
+        MEDIUM("medium"),
+        LOW("low"),
+        ;
+        private String name;
+        AlarmLevel(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+    }
+
+    @Test
+    public void testAlarmLevelEnum() {
+        System.out.println(AlarmLevel.EMERGENCY.toString() instanceof String);
+    }
 
     @Test
     public void testEnumInfo() {
@@ -32,6 +57,19 @@ public class EnumTest {
             }
         }
     }
+
+    @Test
+    public void testNumberUtils() {
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setGroupingUsed(false);
+        formatter.setRoundingMode(RoundingMode.HALF_UP);
+        //
+        //formatter.setMaximumFractionDigits(2);
+        //BigDecimal bigDecimal = BigDecimal.ZERO;
+        //System.out.println(formatter.format(bigDecimal));
+        //System.out.println(formatter.format(0D));
+    }
+
 }
 
 
