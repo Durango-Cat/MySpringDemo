@@ -1,4 +1,4 @@
-package main.java.sort;
+package main.study.datastructure;
 
 import org.junit.Test;
 

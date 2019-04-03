@@ -1,4 +1,4 @@
-package main.java.sort;
+package main.study.datastructure;
 
 /**
  * 插入排序

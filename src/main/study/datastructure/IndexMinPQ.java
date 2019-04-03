@@ -1,4 +1,4 @@
-package main.java.sort;
+package main.study.datastructure;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;

@@ -382,4 +382,16 @@ public class TestString {
                     '}';
         }
     }
+
+    /**
+     * 测试Number类型数值为null时能存储的情况
+     */
+    @Test
+    public void testNumber() {
+        Number[] numbers = new Number[2];
+        numbers[0] = null;
+        numbers[1] = null;
+        System.out.println(numbers[0]);
+        System.out.println(numbers[1]);
+    }
 }
