@@ -394,4 +394,14 @@ public class TestString {
         System.out.println(numbers[0]);
         System.out.println(numbers[1]);
     }
+
+    /**
+     * 测试Number类型数值转换成string类型的是会显示值还是显示的是内存
+     * 结果：显示的是值，数值大了会是科学计数法的数字类型
+     */
+    @Test
+    public void testNumberParseString() {
+        Number number = 131312313123512511F;
+        System.out.println(number.toString());
+    }
 }

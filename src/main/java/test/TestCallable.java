@@ -7,6 +7,8 @@ import java.util.concurrent.*;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 /**
+ * 多线程用Callable实现的测试
+ *
  * @author ZhuQiuPing
  *         on 2018/12/12
  */

@@ -1,4 +1,4 @@
-package main.study.datastructure;
+package main.study.datastructure.sort;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
