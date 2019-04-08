@@ -13,7 +13,7 @@ public class QuickSort {
     @Test
     public void testQuickSort() {
         int size = 13;
-        a = new Double[size];
+//        a = new Double[size];
         System.out.println("排序前: ");
         //将数组填充成随机数
         for(int i = 0; i < size; i++) {
@@ -37,12 +37,12 @@ public class QuickSort {
      * @return 排完序的数组
      */
     public void quick(Double[] a, int low, int high) {
-        if(a.length <= low || low >= high) {
+        if((a.length - 1) < low || low >= high) {
             return ;
         }
         int middleIndex = partition(a, low, high);
 
-        quick(a, low, middleIndex - 1);
+        quick(a, low, middleIndex);
         quick(a, middleIndex + 1, high);
     }
 
@@ -58,14 +58,16 @@ public class QuickSort {
         int numberIndex = low;
         //永真循环
         while(true) {
-            if(a[++low] < lowData) {
+            //在运行的时候，这块一直都包数组越界异常，就是索引为13了。调试了一遍发现，是最后两个元素的时候，low没有做边界判断，
+            //low加上边界判断后，没问题了。但是此处的边界判断啰嗦，有待优化
+            if(++low < a.length && a[low] < lowData) {
                 continue;
             } else if(a[--high] > lowData) {
-                if(a[low] > lowData) {
+                if(low < a.length && a[low] > lowData) {
                     low--;
                 }
                 continue;
-            } else if(a[high] < lowData && a[low] < lowData) {
+            } else if(low < a.length && a[high] < lowData && a[low] < lowData) {
                 high++;
                 continue;
             }
@@ -74,13 +76,14 @@ public class QuickSort {
                 break;
             }
 
-            if(a[low] > lowData && a[high] < lowData) {
+            if(low < a.length && a[low] > lowData && a[high] < lowData) {
                 exchange(a, low, high);
             }
 
         }
-
-        exchange(a, numberIndex, high);
+        if(numberIndex != high) {
+            exchange(a, numberIndex, high);
+        }
 
         return high;
     }
