@@ -8,16 +8,19 @@ import org.junit.Test;
  */
 public class QuickSort {
 
-    private Double[] a = new Double[]{11.43, 12.33, 2.43, 3.43, 5.54, 7.89, 10.32, 12.32, 2.32, 11.38, 11.98, 12.54, 2.18};
-
+    //private Double[] a = new Double[]{11.43, 12.33, 2.43, 3.43, 5.54, 7.89, 10.32, 12.32, 2.32, 11.38,
+    //        11.98, 12.54, 2.18};
+    /**
+     * 从上次的固定数组，变成随机数值，并且优化了部分代码
+     */
     @Test
     public void testQuickSort() {
         int size = 13;
-//        a = new Double[size];
+        Double[] a = new Double[size];
         System.out.println("排序前: ");
         //将数组填充成随机数
         for(int i = 0; i < size; i++) {
-            //a[i] = Double.parseDouble(String.format("%.2f", Math.random() * 13D));
+            a[i] = Double.parseDouble(String.format("%.2f", Math.random() * 13D));
             System.out.print(a[i] + "\t");
         }
         System.out.println();
@@ -58,17 +61,13 @@ public class QuickSort {
         int numberIndex = low;
         //永真循环
         while(true) {
-            //在运行的时候，这块一直都包数组越界异常，就是索引为13了。调试了一遍发现，是最后两个元素的时候，low没有做边界判断，
-            //low加上边界判断后，没问题了。但是此处的边界判断啰嗦，有待优化
-            if(++low < a.length && a[low] < lowData) {
+            //2019年4月8日，在运行的时候，这块一直都包数组越界异常，就是索引为13了。调试了一遍发现 最后两个元素的时候，low没有做边界判断。
+            if((low + 1) < a.length && a[++low] < lowData) {
                 continue;
             } else if(a[--high] > lowData) {
-                if(low < a.length && a[low] > lowData) {
+                if(a[low] > lowData) {
                     low--;
                 }
-                continue;
-            } else if(low < a.length && a[high] < lowData && a[low] < lowData) {
-                high++;
                 continue;
             }
 
@@ -76,7 +75,7 @@ public class QuickSort {
                 break;
             }
 
-            if(low < a.length && a[low] > lowData && a[high] < lowData) {
+            if(a[low] > lowData && a[high] < lowData) {
                 exchange(a, low, high);
             }
 

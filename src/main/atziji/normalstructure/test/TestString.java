@@ -1,4 +1,4 @@
-package main.atziji.string.test;
+package main.atziji.normalstructure.test;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -8,10 +8,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author ZhuQiuPing
@@ -403,5 +400,34 @@ public class TestString {
     public void testNumberParseString() {
         Number number = 131312313123512511F;
         System.out.println(number.toString());
+    }
+
+    /**
+     * 测试下String类型的数用=号复制后，修改原来的String，新的String值会不会变
+     * 结果：不会变
+     */
+    @Test
+    public void testStringAndCopyString() {
+        String info = "2313413";
+        String copyInfo = info;
+        info = info.replace("2", "www ");
+        System.out.println(info);
+        System.out.println(copyInfo);
+    }
+
+    @Test
+    public void testOr() {
+        boolean bool1 = false;
+        boolean bool2 = false;
+
+        System.out.println(bool1 || bool2);
+    }
+
+    @Test
+    public void testStringCompare() {
+        List<String> orderList = Lists.newArrayList("98", "94","9", "89","10","22", "95", "87");
+        //倒叙
+        orderList.sort(Comparator.comparing(String::trim));
+        orderList.forEach(System.out::println);
     }
 }
