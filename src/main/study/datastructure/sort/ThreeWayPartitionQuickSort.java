@@ -16,7 +16,8 @@ public class ThreeWayPartitionQuickSort extends Insection {
 
     private static Integer THREE = 3;
 
-    private static Double[] a = new Double[] {23.3, 23.1, 14.2, 23.1, 19.3, 19.2, 23.3, 23.1, 23.4, 19.3, 23.1, 32.1, 23.3, 23.1, 19.2};
+    private static Double[] a = new Double[] {23.3, 23.1, 14.2, 23.1, 19.3, 19.2, 23.3, 23.1, 23.4, 19.3, 23.1,
+            32.1, 23.3, 23.1, 19.2};
 
     @Test
     public void testThreeWayPartitionQuickSort() {
@@ -28,7 +29,7 @@ public class ThreeWayPartitionQuickSort extends Insection {
         }
         System.out.println();
         System.out.println("排序后：");
-        quick(a, 0, size);
+        quick(a, 0, size - 1);
         for(int i = 0; i < size; i++) {
             System.out.print(a[i] + "\t");
         }
@@ -45,18 +46,27 @@ public class ThreeWayPartitionQuickSort extends Insection {
      */
     public void quick(Double[] a, int low, int high) {
 
+        if(low < 0 || high < 0 || low > high) {
+            return;
+        }
         if((low + THREE) >= high) {
             Insection.sort(a, low, high);
             return ;
         }
 
-            int lt = low,i=low+1,gt = high;
+            int lt = low, i=low+1, gt = high;
             Double temp = a[low];
             while(i <= gt){
+                //如果待查索引对应的元素比比较的元素小，就将跟待查元素相同索引对应的元素与索引对应的元素进行交换，接下来两个索引累加。
+                //累加就是：从左边只要小于待查元素的元素，都不再lt范围内，所以lt会累加。i累加是要变成下一个未排序比较的元素。
                 if(a[i] < temp){
-                    exch(a,lt++,i++);
-                }else if(a[i] > temp){
-                    exch(a,i,gt--);
+                    exch(a, lt++, i++);
+                }
+                //如果待查索引对应的元素比比较的元素大，就将跟待查元素相同的高位索引与待查索引对应的元素进行交换，接下来只将于待查元素相同的高位索引向下减1
+                //交换，是将查出来大的元素放到待查元素相同的右侧位置去；减1，是因为交换过后，该位置已经是大于比较的元素，而非相等，所以索引要往前移
+                //
+                else if(a[i] > temp){
+                    exch(a, i, gt--);
                 }else{
                     i++;
                 }

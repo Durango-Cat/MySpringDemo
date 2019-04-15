@@ -37,7 +37,7 @@ public class Insection {
             return ;
         }
 
-        for(int i = low; i < high; i++) {
+        for(int i = low; i <= high; i++) {
             for(int j = i; j > 0 && (a[j] < a[j - 1]); j--) {
                 each(j, j - 1, a);
             }
