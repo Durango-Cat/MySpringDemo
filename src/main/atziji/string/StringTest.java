@@ -1,8 +1,9 @@
-package main.java.test;
+package main.atziji.string;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.junit.Test;
 
 import java.io.*;
@@ -317,20 +318,43 @@ public class StringTest {
 
     @Test
     public void testException() {
-        try {
-            List<String> strList = Lists.newArrayList();
-            strList.add("3232");
-            for(int i = 0; i < 10; i++) {
-                try {
-                    strList.add(throwExceptionInfo());
-                } catch (RuntimeException e) {
-                    System.out.println("piapiapia");
-                }
-                //System.out.println(strList.size());
-            }
-            strList.forEach(System.out::println);
-        } catch (Exception e) {
-            System.out.println("dwwdwe");
+        //try {
+        //    List<String> strList = Lists.newArrayList();
+        //    strList.add("3232");
+        //    for(int i = 0; i < 10; i++) {
+        //        try {
+        //            strList.add(throwExceptionInfo());
+        //        } catch (RuntimeException e) {
+        //            System.out.println("piapiapia");
+        //        }
+        //        //System.out.println(strList.size());
+        //    }
+        //    strList.forEach(System.out::println);
+        //} catch (Exception e) {
+        //    System.out.println("dwwdwe");
+        //}
+        //String xx1 = "2342";
+        //String xx2 = "33434";
+        //compareXX(xx1, xx2);
+        //System.out.println(xx1);
+
+        String[] str1 = new String[]{"231", "3434", "ewe", "23212", "dsde"};
+        Set<String> set1 = Sets.newHashSet();
+        set1.add("xe");
+        set1.add("231");
+        set1.add("2313");
+        set1.add("3434");
+
+        System.out.println(set1.size());
+        Collections.addAll(set1, str1);
+        System.out.println("size : " + set1.size());
+    }
+
+    public void compareXX(String xx1, String xx2) {
+        xx1 = "";
+        xx2 = xx1;
+        if(xx1.equals(xx2)) {
+            System.out.println("一样");
         }
     }
 

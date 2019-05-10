@@ -1,4 +1,4 @@
-package main.atziji.normalstructure.test;
+package main.atziji.string;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -425,9 +425,56 @@ public class TestString {
 
     @Test
     public void testStringCompare() {
-        List<String> orderList = Lists.newArrayList("98", "94","9", "89","10","22", "95", "87");
+        //List<String> orderList = Lists.newArrayList("98", "94","9", "89","10","22", "95", "87");
         //倒叙
-        orderList.sort(Comparator.comparing(String::trim));
-        orderList.forEach(System.out::println);
+        //orderList.sort(Comparator.comparing(String::trim));
+        //orderList.forEach(System.out::println);
     }
+
+    @Test
+    public void testStringSplit() {
+        String xx = "123-";
+        xx += "23-";
+        System.out.println(xx.split("-").length);
+    }
+
+    @Test
+    public void testDoubleToString() {
+        //Object xx = new Object(420000000000D);
+        //System.out.println(new BigDecimal(xx.toString()).toPlainString());
+        //String str = "234,2323,2323,245,121";
+        //Sets.newHashSet(str.split(","));
+        StringBuffer sb = new StringBuffer().append("234").append(" ").append("@3423").append(" ");
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb.length());
+    }
+
+    @Test
+    public void testList1() {
+        Set<String> streamIdOne = Sets.newHashSet("123", "234", "434");
+        //Set<String> streamIdTwo = Sets.newHashSet("123", "234", "345");
+        //List<String> ewew = Lists.newArrayList("3232", "2sddsd", "12313123", "121rerf");
+        //Collections.sort(ewew);
+        //String institutionNumberOne = "114";
+        //String institutionNumberTwo = "114";
+        //String amountOne = "123132123123123";
+        //String amountTwo = "123132123123123";
+        //addStreamIdByDecideCofigTheSame(institutionNumberOne, institutionNumberTwo, amountOne, amountTwo, streamIdOne, streamIdTwo);
+        //System.out.println(streamIdTwo.size());
+        //System.out.println(streamIdOne.size());
+        List<String> infoList = Lists.newArrayList("213", "3434", "2313", "34312");
+        Set<String> sets = Sets.newHashSet(infoList);
+        sets.forEach(System.out::println);
+    }
+
+    private void addStreamIdByDecideCofigTheSame(String institutionNumberOne, String institutionNumberTwo, String amountOne,
+                                                 String amountTwo, Set<String> streamIdSetOne, Set<String> streamIdSetTwo) {
+        if(institutionNumberOne.equals(institutionNumberTwo)
+                && amountOne.equals(amountTwo)) {
+            streamIdSetOne.addAll(streamIdSetTwo);
+            streamIdSetTwo.clear();
+        }
+        //return streamIdSetTwo;
+    }
+
 }

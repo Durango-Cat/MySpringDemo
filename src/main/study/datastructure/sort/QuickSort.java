@@ -1,6 +1,13 @@
 package main.study.datastructure.sort;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * 快速排序测试
@@ -20,7 +27,7 @@ public class QuickSort {
         System.out.println("排序前: ");
         //将数组填充成随机数
         for(int i = 0; i < size; i++) {
-            a[i] = Double.parseDouble(String.format("%.2f", Math.random() * 13D));
+            //a[i] = Double.parseDouble(String.format("%.2f", Math.random() * 13D));
             System.out.print(a[i] + "\t");
         }
         System.out.println();
@@ -85,6 +92,84 @@ public class QuickSort {
         }
 
         return high;
+    }
+
+    /**
+     * 书本上的快排关键方法
+     */
+    public static int partition(Comparable[] a, int low, int high) {
+        int i = low, j = high + 1;
+        Comparable v = a[low];
+        while(true) {
+            while(less(a[++i], v)) {
+                if(i == high) {
+                    break;
+                }
+            }
+            while (less(v, a[--j])) {
+                if(j == low) {
+                    break;
+                }
+            }
+
+            if(i >= j) {
+                break;
+            }
+
+            exch(a, i, j);
+        }
+
+        exch(a, low, j);
+        return j;
+    }
+
+    public static boolean less(Comparable left, Comparable right) {
+        return left.compareTo(right) < 0;
+    }
+
+    public static void exch(Comparable[] a, int left, int right) {
+        Comparable temp = a[left];
+        a[left] = a[right];
+        a[right] = temp;
+    }
+
+    @Data
+    @AllArgsConstructor
+    class Person {
+        private String name;
+        private String age;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getAge() {
+            return age;
+        }
+
+        public void setAge(String age) {
+            this.age = age;
+        }
+
+        public Person(String name, String age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+    @Test
+    public void test1() {
+        Person person1 = new Person("2323", "34");
+        Person person2 = new Person("2323", "34");
+        Person person3 = new Person("2323", "34");
+        Person person4 = new Person("2323", "34");
+        List<Person> xx = Lists.newArrayList(person1, person2,person3,person4, null);
+        Set<Person> xxSet = Sets.newHashSet(xx);
+        xxSet.remove(null);
+        System.out.println(xxSet.size());
     }
 
     /**

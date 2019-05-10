@@ -41,8 +41,9 @@ public class ExportFileTest {
         Map<String, String> streamIdAndTopoNamesMap = Maps.newLinkedHashMap();
         streamIdAndTopoNamesMap.put("123123123123", "业务路径1-1,业务路径1-2");
         streamIdAndTopoNamesMap.put("765432345666", "业务路径2-1,业务路径2-2");
-        streamIdAndTopoNamesMap.put("765445654343", "业务路径3-1,业务路径3-2,业务路径3-3");
-        streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2,业务路径4-3,业务路径4-4");
+        streamIdAndTopoNamesMap.put("765445654343", "业务路径3-1,业务路径3-2");
+        streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2,业务路径4-3,业务路径4-4,4343434,344345345345,345345345345,3453523523,353523242,2342523452");
+        //streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2");
         streamIdAndTopoNamesMap.put("876578345432", "业务路径5-1,业务路径5-2");
         streamIdAndTopoNamesMap.put("213432421234", "业务路径6-1,业务路径6-2");
 
@@ -183,6 +184,8 @@ public class ExportFileTest {
             // 设置长文本自动换行
             headerStyle.setWrapText(true);
             headerStyle.setFont(font);
+            //设置填充数据的单元格自动换行
+            cellStyle.setWrapText(true);
             // 创建表头
             XSSFRow headerRow = sheet.createRow(0);
             headerRow.setHeightInPoints(25f);
@@ -198,15 +201,22 @@ public class ExportFileTest {
             Set<String> keySet = dataMap.keySet();
             int i = 1;
             int firstColumnLength = 0, secondColumnLength = 0;
+
             for(String key : keySet) {
                 // 创建行
                 XSSFRow row = sheet.createRow(i++);
+                int enterCnt = 0;
                 row.setHeightInPoints(20f);
                 // 开始创建单元格并赋值
                 XSSFCell termCell = row.createCell(0);
                 if(firstColumnLength < key.length()) {
                     firstColumnLength = key.length();
                 }
+                int rwsTemp = row.getCell(0).toString().split("\r\n").length;
+                if (rwsTemp > enterCnt) {
+                    enterCnt = rwsTemp;
+                }
+
                 termCell.setCellValue(key);
                 termCell.setCellStyle(cellStyle);
 
@@ -215,24 +225,37 @@ public class ExportFileTest {
                     secondColumnLength = value.length();
                 }
                 XSSFCell countCell = row.createCell(1);
+                if(secondColumnLength < value.length()) {
+                    secondColumnLength = value.length();
+                }
                 countCell.setCellValue(value);
                 countCell.setCellStyle(cellStyle);
+                rwsTemp = row.getCell(1).toString().split("\n").length;
+                System.out.println(rwsTemp);
+                if (rwsTemp > enterCnt) {
+                    enterCnt = rwsTemp;
+                }
+                System.out.println(enterCnt);
+                //增加行的高度以适应2行文本的高度,设置高度单位(像素)
+                row.setHeightInPoints((enterCnt * sheet.getDefaultRowHeightInPoints()));
             }
 
             //在列上加样式（第一列15个字符的长度，第二列70个字符的长度）
             //这种方法是手动设置列宽，因为poi导出excel只支持英文、数字列宽自适应（用sheet.AutoSizeColumn(i);如果出现中文就会出现列宽不足现象)
             sheet.setColumnWidth(1, (secondColumnLength + 2) * 256);
             sheet.setColumnWidth(0, (firstColumnLength + 2) * 256);
+            //sheet.autoSizeColumn(0, true);
+            //sheet.autoSizeColumn(1, true);
             workbook2007.write(fileOutputStream);
         } catch (IOException e) {
-            LOG.info("json类型的写入文件后异常" + e);
+            LOG.info("xlsx类型的写入文件后异常" + e);
         } finally {
             try {
                 if (fileOutputStream != null) {
                     fileOutputStream.close();
                 }
             } catch (IOException e) {
-                LOG.info("json类型的写入文件后关闭FileOutputStream资源异常");
+                LOG.info("xlsx类型的写入文件后关闭FileOutputStream资源异常");
             }
 
             try {
@@ -240,7 +263,7 @@ public class ExportFileTest {
                     workbook2007.close();
                 }
             } catch (IOException e) {
-                LOG.info("json类型的写入文件后关闭XSSFWorkbook资源异常");
+                LOG.info("xlsx类型的写入文件后关闭XSSFWorkbook资源异常");
             }
 
         }
