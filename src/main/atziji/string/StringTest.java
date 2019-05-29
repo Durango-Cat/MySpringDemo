@@ -266,9 +266,13 @@ public class StringTest {
         //String metric = "_ret_code.RC";
         //System.out.println(metric.contains(RET_CODE_METRIC));
 
-        String baseline = "23.233434345E+12";
-        BigDecimal bd1 = new BigDecimal(baseline);
-        System.out.println(bd1.toPlainString());
+        //String baseline = "23.233434345E+12";
+        //BigDecimal bd1 = new BigDecimal(baseline);
+        //System.out.println(bd1.toPlainString());
+        String str = "234234/234234234234";
+        System.out.println(str);
+        str = str.replace("/", "-");
+        System.out.println(str);
     }
 
     /**

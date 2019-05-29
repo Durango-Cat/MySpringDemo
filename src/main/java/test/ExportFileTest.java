@@ -2,6 +2,7 @@ package main.java.test;
 
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
+import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.xssf.usermodel.*;
 
 import java.io.*;
@@ -51,8 +52,12 @@ public class ExportFileTest {
         String exportDirectory = "/Users/zhuqiuping/java/test";
         //导出的文件名上要包括导出的日期
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        String fileName = simpleDateFormat.format(new Date()) + "流ID和路径名称对应表";
-
+        String fileName = simpleDateFormat.format(new Date()) + "=-+-_";
+        fileName = fileName.replace("?", " ");
+        fileName = fileName.replace("/", " ");
+        fileName = fileName.replace("*", " ");
+        fileName = fileName.replace("[", " ");
+        fileName = fileName.replace("]", " ");
         switch (exportFileExtension) {
             case XLSX_FILE_EXTENSION:
                 //导出xlsx可以分为有Response方式（网页请求，里面分为get请求和post请求两种方式）和无Response方式。
@@ -152,10 +157,169 @@ public class ExportFileTest {
      *   poi-ooxml-schemas-4.0.1.jar, poi-scratchpad-4.0.1.jar, xmlbeans-3.0.2.jar, dom4j-1.6.1.jar, commons-collections4-4.2.jar,
      *   commons-compress-1.18.jar, commons-logging-1.1.1.jar)
      *
+     *   此处为了适应4.2里面的报表导出excel支持图片，此处试下
+     *
+     *
      * @param path          文件路径
      * @param fileName      文件名
      * @param dataMap       数据集合
      */
+    private static void writeXlsxResponseNew(String path, String fileName, Map<String, String> dataMap) {
+        FileOutputStream fileOutputStream = null;
+        XSSFWorkbook workbook2007 = null;
+
+        File file = new File(path + "/" + fileName + ".xlsx");
+        File filePath = new File(path);
+        //判断文件是否存在，不存在创建
+        if(!judgeFileExists(fileName, file, filePath, ".xlsx")) {
+            return ;
+        }
+
+        // 写入
+        try {
+
+            fileOutputStream = new FileOutputStream(file);
+            // 先创建工作薄的对象
+            workbook2007 = new XSSFWorkbook();
+            // 创建工作表对象并命名
+            XSSFSheet sheet = workbook2007.createSheet(fileName);
+
+
+
+           //URL url = ExportFileTest.class.getProtectionDomain().getCodeSource().getLocation();
+           // String fileInfo = url.getPath();
+           // System.out.println(fileInfo);
+           // int index = path.indexOf("WEB-INF");
+           // if (index == -1) {
+           //     index = path.indexOf("classes");
+           // }
+           // if (index == -1) {
+           //     index = path.indexOf("bin");
+           // }
+           //ServletContext context =
+
+            //path = "/Users/zhuqiuping/java/IdeaWorkSpace/test/MySpringDemo/src/main";
+           // System.out.println(fileInfo);
+            //图片绝对路径   
+            //String picFileName = URLDecoder.decode(path + "/pic/favicon-16x16.png", "utf-8");
+            //System.out.println("picFileName-----" + fileInfo);
+            //BufferedImage user_headImg = ImageIO.read(new File(picFileName));
+            //ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+            //ImageIO.write(user_headImg, "jpg", byteArrayOut);
+            byte[] byteData = null;
+            String filePathInfo = path + "ewewerewerwr";
+            try {
+                byteData = readInputStream(new FileInputStream(new File(filePathInfo)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //sheet只能获取一个
+            XSSFDrawing patriarch = sheet.createDrawingPatriarch();
+            //设置图片的属性
+            XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0,(short) 0, 0, (short) 1, 4);
+            anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_DONT_RESIZE);
+            //插入图片 
+            patriarch.createPicture(anchor, workbook2007.addPicture(byteData, XSSFWorkbook.PICTURE_TYPE_JPEG));
+            // 创建样式
+            XSSFFont font = workbook2007.createFont();
+            XSSFCellStyle headerStyle = workbook2007.createCellStyle();
+            XSSFCellStyle cellStyle = workbook2007.createCellStyle();
+
+            // 字体加粗
+            font.setBold(true);
+            // 设置长文本自动换行
+            headerStyle.setWrapText(true);
+            headerStyle.setFont(font);
+            //设置填充数据的单元格自动换行
+            cellStyle.setWrapText(true);
+            // 创建表头
+            XSSFRow headerRow = sheet.createRow(3);
+            headerRow.setHeightInPoints(25f);
+
+            XSSFCell termHeader = headerRow.createCell(0);
+            termHeader.setCellValue("流ID");
+            termHeader.setCellStyle(headerStyle);
+
+            XSSFCell transCountHeader = headerRow.createCell(1);
+            transCountHeader.setCellValue("路径名称");
+            transCountHeader.setCellStyle(headerStyle);
+
+            Set<String> keySet = dataMap.keySet();
+            int i = 4;
+            int firstColumnLength = 0, secondColumnLength = 0;
+
+            for(String key : keySet) {
+                // 创建行
+                XSSFRow row = sheet.createRow(i++);
+                int enterCnt = 0;
+                //row.setHeightInPoints(20f);
+                // 开始创建单元格并赋值
+                XSSFCell termCell = row.createCell(0);
+                //if(firstColumnLength < key.length()) {
+                //    firstColumnLength = key.length();
+                //}
+                //int rwsTemp = row.getCell(0).toString().split("\r\n").length;
+                //if (rwsTemp > enterCnt) {
+                //    enterCnt = rwsTemp;
+                //}
+
+                termCell.setCellValue(key);
+                termCell.setCellStyle(cellStyle);
+                if(firstColumnLength < termCell.getStringCellValue().length()) {
+                    firstColumnLength = termCell.getStringCellValue().length();
+                }
+                String value = dataMap.get(key);
+                //if(secondColumnLength < value.length()) {
+                //    secondColumnLength = value.length();
+                //}
+                XSSFCell countCell = row.createCell(1);
+
+                countCell.setCellValue(value);
+                countCell.setCellStyle(cellStyle);
+                //rwsTemp = row.getCell(1).toString().split("\n").length;
+                //System.out.println(rwsTemp);
+                //if (rwsTemp > enterCnt) {
+                //    enterCnt = rwsTemp;
+                //}
+                if(secondColumnLength < countCell.getStringCellValue().length()) {
+                    secondColumnLength = countCell.getStringCellValue().length();
+                }
+                System.out.println(enterCnt);
+                //增加行的高度以适应2行文本的高度,设置高度单位(像素)
+                //row.setHeightInPoints((enterCnt * sheet.getDefaultRowHeightInPoints()));
+            }
+
+            //在列上加样式（第一列15个字符的长度，第二列70个字符的长度）
+            //这种方法是手动设置列宽，因为poi导出excel只支持英文、数字列宽自适应（用sheet.AutoSizeColumn(i);如果出现中文就会出现列宽不足现象)
+            sheet.setColumnWidth(1, 50 * 256);
+            sheet.setColumnWidth(0, 20 * 256);
+            //sheet.autoSizeColumn(0, true);
+            //sheet.autoSizeColumn(1, true);
+
+            XSSFSheet xssfSheet = workbook2007.createSheet("第二个");
+            workbook2007.write(fileOutputStream);
+        } catch (IOException e) {
+            LOG.info("xlsx类型的写入文件后异常" + e);
+        } finally {
+            try {
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                LOG.info("xlsx类型的写入文件后关闭FileOutputStream资源异常");
+            }
+
+            try {
+                if (workbook2007 != null) {
+                    workbook2007.close();
+                }
+            } catch (IOException e) {
+                LOG.info("xlsx类型的写入文件后关闭XSSFWorkbook资源异常");
+            }
+
+        }
+    }
+
     private static void writeXlsxNoResponse(String path, String fileName, Map<String, String> dataMap) {
         FileOutputStream fileOutputStream = null;
         XSSFWorkbook workbook2007 = null;
@@ -206,46 +370,51 @@ public class ExportFileTest {
                 // 创建行
                 XSSFRow row = sheet.createRow(i++);
                 int enterCnt = 0;
-                row.setHeightInPoints(20f);
+                //row.setHeightInPoints(20f);
                 // 开始创建单元格并赋值
                 XSSFCell termCell = row.createCell(0);
-                if(firstColumnLength < key.length()) {
-                    firstColumnLength = key.length();
-                }
-                int rwsTemp = row.getCell(0).toString().split("\r\n").length;
-                if (rwsTemp > enterCnt) {
-                    enterCnt = rwsTemp;
-                }
+                //if(firstColumnLength < key.length()) {
+                //    firstColumnLength = key.length();
+                //}
+                //int rwsTemp = row.getCell(0).toString().split("\r\n").length;
+                //if (rwsTemp > enterCnt) {
+                //    enterCnt = rwsTemp;
+                //}
 
                 termCell.setCellValue(key);
                 termCell.setCellStyle(cellStyle);
-
+                if(firstColumnLength < termCell.getStringCellValue().length()) {
+                    firstColumnLength = termCell.getStringCellValue().length();
+                }
                 String value = dataMap.get(key);
-                if(secondColumnLength < value.length()) {
-                    secondColumnLength = value.length();
-                }
+                //if(secondColumnLength < value.length()) {
+                //    secondColumnLength = value.length();
+                //}
                 XSSFCell countCell = row.createCell(1);
-                if(secondColumnLength < value.length()) {
-                    secondColumnLength = value.length();
-                }
+
                 countCell.setCellValue(value);
                 countCell.setCellStyle(cellStyle);
-                rwsTemp = row.getCell(1).toString().split("\n").length;
-                System.out.println(rwsTemp);
-                if (rwsTemp > enterCnt) {
-                    enterCnt = rwsTemp;
+                //rwsTemp = row.getCell(1).toString().split("\n").length;
+                //System.out.println(rwsTemp);
+                //if (rwsTemp > enterCnt) {
+                //    enterCnt = rwsTemp;
+                //}
+                if(secondColumnLength < countCell.getStringCellValue().length()) {
+                    secondColumnLength = countCell.getStringCellValue().length();
                 }
                 System.out.println(enterCnt);
                 //增加行的高度以适应2行文本的高度,设置高度单位(像素)
-                row.setHeightInPoints((enterCnt * sheet.getDefaultRowHeightInPoints()));
+                //row.setHeightInPoints((enterCnt * sheet.getDefaultRowHeightInPoints()));
             }
 
             //在列上加样式（第一列15个字符的长度，第二列70个字符的长度）
             //这种方法是手动设置列宽，因为poi导出excel只支持英文、数字列宽自适应（用sheet.AutoSizeColumn(i);如果出现中文就会出现列宽不足现象)
-            sheet.setColumnWidth(1, (secondColumnLength + 2) * 256);
-            sheet.setColumnWidth(0, (firstColumnLength + 2) * 256);
+            sheet.setColumnWidth(1, 50 * 256);
+            sheet.setColumnWidth(0, 20 * 256);
             //sheet.autoSizeColumn(0, true);
             //sheet.autoSizeColumn(1, true);
+
+            XSSFSheet xssfSheet = workbook2007.createSheet("第二个");
             workbook2007.write(fileOutputStream);
         } catch (IOException e) {
             LOG.info("xlsx类型的写入文件后异常" + e);
@@ -374,5 +543,22 @@ public class ExportFileTest {
             }
         }
         return successOperation;
+    }
+
+    private static byte[] readInputStream(InputStream inStream) throws Exception{
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        //创建一个Buffer字符串
+        byte[] buffer = new byte[1024];
+        //每次读取的字符串长度，如果为-1，代表全部读取完毕
+        int len = 0;
+        //使用一个输入流从buffer里把数据读取出来
+        while( (len=inStream.read(buffer)) != -1 ){
+            //用输出流往buffer里写入数据，中间参数代表从哪个位置开始读，len代表读取的长度
+            outStream.write(buffer, 0, len);
+        }
+        //关闭输入流
+        inStream.close();
+        //把outStream里的数据写入内存
+        return outStream.toByteArray();
     }
 }
