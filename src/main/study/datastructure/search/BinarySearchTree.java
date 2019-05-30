@@ -21,9 +21,13 @@ public class BinarySearchTree {
     @Data
     private class Node {
         /**
-         * 节点里面存储的元素
+         * 节点上用于比较和表示位置的元素
          */
         private Integer key;
+        /**
+         * 节点里面存储的元素
+         */
+        private Object value;
         /**
          * 每个节点的大小
          */
@@ -36,6 +40,12 @@ public class BinarySearchTree {
          * 右节点
          */
         private Node right;
+
+        public Node(Integer key, Object value, int size) {
+            this.key = key;
+            this.value = value;
+            this.size = size;
+        }
     }
 
     /**
@@ -93,7 +103,7 @@ public class BinarySearchTree {
         if(node == null) {
             return null;
         } else {
-            int compare = node.getKey().compareTo(key);
+            int compare = node.key.compareTo(key);
             if(compare < 0) {
                 return get(node.left, key);
             } else if(compare > 0) {
@@ -103,4 +113,76 @@ public class BinarySearchTree {
             }
         }
     }
+
+    /**
+     * 向二叉查找树中插入新节点
+     *
+     * @param key     用于添加的元素
+     * @param value   添加的元素内容
+     */
+    public void put(Integer key, Object value) {
+        if(key == null) {
+            System.out.println("没法比较，也没法插入新节点");
+            return ;
+        }
+
+        if(value == null) {
+            System.out.println("尽量别让value为null");
+        }
+        put(root, key, value);
+    }
+
+    /**
+     * 从根节点开始遍历，在合适的位置插入新的节点(递归）
+     *
+     * @param node      根节点
+     * @param key       此处的key用于比较，将该节点放在在合适的位置
+     * @param value     添加元素的内容
+     */
+    private Node put(Node node, Integer key, Object value) {
+        if(node == null) {
+            node = new Node(key, value, 1);
+        } else {
+            int compare = node.key.compareTo(key);
+            //根节点上的key比待添加元素上的key大
+            if(compare > 0) {
+                node.left = put(node.right, key, value);
+            } else if(compare < 0) {
+                node.right = put(node.left, key, value);
+            } else {
+                node.key = key;
+                node.value = value;
+            }
+
+            node.size = size(node.left) + size(node.right) + 1;
+        }
+
+        return node;
+    }
+
+    /**
+     * 找小于等于某个节点个数的节点位置
+     *
+     * @param index 节点个数
+     * @return 节点位置
+     */
+    public Integer select(int index) {
+        if(index <= 0) {
+            System.out.println("没法查找index小于等于0个数的节点位置");
+            return -1;
+        }
+
+        return select(root, index);
+    }
+
+    /**
+     * 找小于等于某个节点个数的节点位置
+     *
+     * @param index 节点个数
+     * @return 节点位置
+     */
+    private Integer select(Node root, int index) {
+
+    }
+
 }

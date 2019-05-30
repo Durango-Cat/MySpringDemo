@@ -20,17 +20,20 @@ public class Multiway {
         for (int i = 0; i < N; i++) {
             int ch;
             if ((ch=streams[i].read()) != -1) {
+//                System.out.println(String.valueOf((char)ch));
                 pq.insert(i, String.valueOf((char)ch));
             }
         }
 
         while (!pq.isEmpty()) {
             // 不断选出最小元素打印
-            System.out.print(pq.min());
+            System.out.println(pq.min() + "\t----");
             // 关联这个整数的对象被删除，从关联该整数的剩余流中再读取一个字符，并加入到索引优先队列中
             int i = pq.delMin();
             int ch;
             if ((ch=streams[i].read()) != -1) {
+                System.out.println();
+//                System.out.println(++t + "插入新的元素：" + String.valueOf((char)ch));
                 pq.insert(i, String.valueOf((char)ch));
             }
         }
