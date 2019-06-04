@@ -21,11 +21,11 @@ public class BinarySearchTree {
     @Data
     private class Node {
         /**
-         * 节点上用于比较和表示位置的元素
+         * 存储字典的键
          */
         private Integer key;
         /**
-         * 节点里面存储的元素
+         * 存储字典的值
          */
         private Object value;
         /**
@@ -161,7 +161,7 @@ public class BinarySearchTree {
     }
 
     /**
-     * 找小于等于某个节点个数的节点位置
+     * 查找index下标所指的键
      *
      * @param index 节点个数
      * @return 节点位置
@@ -176,12 +176,36 @@ public class BinarySearchTree {
     }
 
     /**
-     * 找小于等于某个节点个数的节点位置
+     * 查找index下标所指的键（因为二叉查找树不像数组一样，有精确的下标，根据下标很快就能找到对应的元素。所以二叉查找树会在每个节点
+     * 内部放一个size来标识包括该结点的下标。那么根据index下标来找到对应的结点，即找到它的左子节点等于index就表示找到那个元素的键）
      *
      * @param index 节点个数
      * @return 节点位置
      */
     private Integer select(Node root, int index) {
+        if(root == null) {
+            return -1;
+        }
+
+        //查询左节点的长度
+        int size = size(root.left);
+        //如果左结点大于要查询的index，表示要查询的index在节点的左侧
+        if(size > index) {
+            return select(root.left, index);
+        }
+        //如果左结点小于要查询的index，表示要查询的index在节点的右侧（但是查询节点右侧的index时，需要变成右侧长度相关的index数量
+        else if(size < index) {
+            return select(root.right, index - size -1);
+        } else {
+            return size;
+        }
+    }
+
+    public int rank(Integer key) {
+        return rank(root, key);
+    }
+
+    private int rank(Node root, Integer key) {
 
     }
 
