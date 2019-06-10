@@ -19,7 +19,7 @@ public class BinarySearchTree {
      * 每个树节点
      */
     @Data
-    private class Node {
+    public class Node {
         /**
          * 存储字典的键
          */
@@ -205,8 +205,219 @@ public class BinarySearchTree {
         return rank(root, key);
     }
 
+    /**
+     * 根据键找到对应index
+     *
+     * @param key   待查找的键
+     * @return  对应index
+     */
     private int rank(Node root, Integer key) {
+        if(root == null) {
+            return -1;
+        }
 
+        int compareTo = root.key.compareTo(key);
+        if(compareTo < 0) {
+            return rank(root.left, key);
+        } else if(compareTo > 0) {
+            return root.left.size + rank(root.right, key) + 1;
+        } else {
+            return root.left.size;
+        }
     }
 
+    /**
+     * 向下取节点的key值，意思就是传进来一个key, 从二叉查找树中找到小于等于此key的键
+     *
+     * @param key       键值
+     */
+    public Integer floor(Integer key) {
+        if(key == null) {
+            System.out.println("向下取节点的key值不能为null");
+        }
+        return floor(root, key);
+    }
+
+    /**
+     * 向下取节点的key值，意思就是传进来一个key, 从二叉查找树中找到小于等于此key的键
+     *
+     * @param key       键值
+     */
+    private Integer floor(Node root, Integer key) {
+        if(root == null) {
+            return -1;
+        }
+        //将key值跟root节点上的键值比较
+        int compareTo = key.compareTo(root.key);
+        if(compareTo < 0) {
+            return floor(root.left, key);
+        } else if(compareTo > 0) {
+            Integer rightNode = floor(root.right, key);
+            if(rightNode == -1) {
+                return root.key;
+            } else {
+                return rightNode;
+            }
+        } else {
+            return root.key;
+        }
+    }
+
+    /**
+     * 向上取节点的key值，就是传进来一个key, 从二叉查找树中找到大于等于此key的键
+     *
+     * @param key       键值
+     */
+    public Integer ceiling(Integer key) {
+        if(key == null) {
+            System.out.println("向上取整的key值不能为null");
+        }
+        return ceiling(root, key);
+    }
+
+    /**
+     * 向上取节点的key值，就是传进来一个key, 从二叉查找树中找到大于等于此key的键
+     *
+     * @param key       键值
+     */
+    private Integer ceiling(Node root, Integer key) {
+        if(root == null) {
+            return -1;
+        }
+
+        int compare = key.compareTo(root.key);
+        if(compare > 0) {
+            return ceiling(root.right, key);
+        } else if(compare < 0) {
+            Integer leftNode = ceiling(root.left, key);
+            if(leftNode == -1) {
+                return root.key;
+            } else {
+                return leftNode;
+            }
+        } else {
+            return root.key;
+        }
+    }
+
+    /**
+     * 删除最小节点
+     */
+    public Node deleteMin() {
+        if(root == null) {
+            System.out.println("二叉查找树中没有存储任何元素,无法删除最小节点");
+        }
+        return deleteMin(root);
+    }
+
+    /**
+     * 删除最小的节点
+     *
+     * @param root  根节点
+     * @return 最小的节点
+     */
+    private Node deleteMin(Node root) {
+        Node node = root;
+        while(node.left != null && node.left.size > 2) {
+            node.size -= 1;
+            node = node.left;
+        }
+
+        if(node.left == null) {
+            //表示只有一个根节点
+            if(node.right == null) {
+                this.root = null;
+            }
+            //没有左节点，只有右节点，
+            else {
+                this.root = node.right;
+            }
+            return root;
+        }
+        //表示该节点下面只有一个左节点
+        else if(node.left.size == 1) {
+            Node newNode = node.left;
+            node.left = null;
+            node.size -= 1;
+            return newNode;
+        } else {
+            Node newNode = node.left;
+            if(newNode.left == null && newNode.right != null) {
+                node.left = newNode.right;
+            } else {
+                node.left.left = null;
+                node.left.size = 1;
+            }
+            node.size -= 1;
+            return newNode.left;
+        }
+    }
+
+    /**
+     * 从网上搜到的删除最小元素，递归真的很省代码（不过套路不太一样，返还结果是一直递归结束作为根节点用的）
+     *
+     * @param node      待判断大小的元素
+     * @return          递归作为根节点用的返回值
+     */
+    private Node deleteMinFromInternet(Node node) {
+        if(node.left == null) {
+            return node.right;
+        }
+            node.left = deleteMinFromInternet(node.left);
+            node.size = size(node.left) + size(node.right) + 1;
+            return node;
+    }
+
+    public Node deleteMax() {
+        if(root == null) {
+            System.out.println("二叉查找树为空，不能执行删除操作");
+        }
+        return deleteMax(root);
+    }
+
+    private Node deleteMax(Node root) {
+        Node node = root;
+
+        while(node != null && node.right != null && node.right.size > 2) {
+            node.size -= 1;
+            node = node.right;
+        }
+
+        //节点下面没有子节点了，比如根节点
+        if(node.right == null) {
+            //表示只有根节点
+            if(node.left == null) {
+                this.root = null;
+            }
+            //表示二叉查找树根节点左边有值，根节点右侧没值
+            else {
+                this.root = node.left;
+            }
+            return node;
+        }
+        //表示节点的右侧子节点里面只有一个值，即该值就是最大值
+        else if(node.right.size == 1) {
+            Node newNode = node.right;
+            node.right = null;
+            node.size -= 1;
+            return newNode;
+        }
+        //表示节点的右侧子节点里面有两个值，即该值的右子节点或者该值就是最大值
+        else {
+            Node newNode = node.right;
+            //表示该结点只有右子节点有值
+            if(node.right.left == null && node.right.right != null) {
+                newNode = node.right.right;
+                node.right.right = null;
+                node.right.size = 1;
+            }
+            //表示该节点只有左子节点有值，那么删掉该节点让左子节点替代该节点
+            else {
+                node.right = node.right.left;
+                node.size -= 1;
+            }
+
+            return newNode;
+        }
+    }
 }
