@@ -306,6 +306,7 @@ public class BinarySearchTree {
     public Node deleteMin() {
         if(root == null) {
             System.out.println("二叉查找树中没有存储任何元素,无法删除最小节点");
+            return null;
         }
         return deleteMin(root);
     }
@@ -368,13 +369,22 @@ public class BinarySearchTree {
             return node;
     }
 
+    /**
+     * 删除最大元素
+     */
     public Node deleteMax() {
         if(root == null) {
             System.out.println("二叉查找树为空，不能执行删除操作");
+            return null;
         }
         return deleteMax(root);
     }
 
+    /**
+     * 从根节点中遍历删除最大元素
+     *
+     * @param root  根节点
+     */
     private Node deleteMax(Node root) {
         Node node = root;
 
@@ -419,5 +429,30 @@ public class BinarySearchTree {
 
             return newNode;
         }
+    }
+
+    /**
+     * 删除指定键，并维持二叉查找树的平衡
+     * @param key   指定键
+     */
+    public void delete(Integer key) {
+        delete(root, key);
+    }
+
+    /**
+     * 删除指定键，并维持二叉查找树的平衡
+     *
+     * 这个方法的主要点是在于查找到元素后，再从元素所在节点的位置的几种情况来维持二叉查找树的平衡
+     * ①查找到元素在左子节点上或者在右子节点，那么删除之后就不需要移动其他元素，只需要改下这个节点的父节点指向变为null
+     * ②查找到元素下面只有一个子节点，那么删除元素后，要把对应的子节点放到这个节点的位置上。
+     * ③查找到元素有两个子节点，分别是左子节点和右子节点。此处需要把左子节点放到这个删除节点的位置上。
+     * ④查找到元素子节点下面还有子节点，就需要查找该节点的左子节点下的右节点
+     *
+     * @param root  根节点
+     * @param key   指定键
+     * @return  根节点
+     */
+    private Node delete(Node root, Integer key) {
+        return null;
     }
 }

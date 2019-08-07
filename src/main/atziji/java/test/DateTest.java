@@ -78,14 +78,22 @@ public class DateTest {
         Long to = System.currentTimeMillis();
         Calendar cale = Calendar.getInstance();
         cale.setTimeInMillis(to);
-        cale.add(Calendar.DATE, -1);
-        cale.set(Calendar.HOUR_OF_DAY, 23);
+        //cale.add(Calendar.DATE, -1);
+        //cale.set(Calendar.HOUR_OF_DAY, 23);
+        cale.set(Calendar.HOUR_OF_DAY, 0);
         cale.set(Calendar.MINUTE, 0);
         cale.set(Calendar.SECOND, 0);
-        cale.set(Calendar.MILLISECOND, 0);
+        //cale.set(Calendar.MILLISECOND, 0);
         Long from = cale.getTimeInMillis();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd mm:HH:ss");
         System.out.println(simpleDateFormat.format(new Date(from)));
+
+        to = 1560692760000L;
+        cale.setTimeInMillis(to);
+        cale.set(Calendar.HOUR_OF_DAY, 0);
+        cale.set(Calendar.MINUTE, 0);
+        cale.set(Calendar.SECOND, 0);
+        System.out.println(simpleDateFormat.format(cale.getTime()));
     }
 
     /**

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -254,10 +255,53 @@ public class StringTest {
 
     @Test
     public void testDouble() {
-        BigDecimal b2 = new BigDecimal(Double.toString(100.00));
-        BigDecimal b3 = new BigDecimal(Double.toString(48.32));
+        //BigDecimal b2 = new BigDecimal("100");
+        //BigDecimal b3 = new BigDecimal("1.333");
         //System.out.println(b3.subtract(b2).doubleValue());
-        System.out.println(b2.subtract(b3).doubleValue());
+        //System.out.println(b3.multiply(b2).doubleValue());
+
+        //Double d = 1.333D;
+        //System.out.println(d * 100);
+        Double xx = 152711299515232D;
+        System.out.println(xx.longValue());
+        System.out.println(xx);
+    }
+
+    /**
+     * 强制保留3位小数
+     */
+    @Test
+    public void testFloat() {
+        Long count1 = 3234234234L;
+        Long count2 = 10032L;
+        //Double f = count2 * 100D / count1;
+        Double f = 100D;
+        System.out.println(f);
+        BigDecimal obj = new BigDecimal(f).setScale(3, BigDecimal.ROUND_HALF_DOWN);
+        DecimalFormat df = new DecimalFormat( "#0.000");
+        if(obj.compareTo(BigDecimal.ZERO)==0 || obj.toPlainString().equals("0.000")) {
+            System.out.println(0);
+        } else if(obj.compareTo(new BigDecimal(100)) >= 0) {
+            System.out.println(100);
+        }else {
+            System.out.println(Float.parseFloat(df.format(obj).toString()));
+        }
+        //String value = df.format(f);
+        //System.out.println(Float.parseFloat(value));
+    }
+
+    @Test
+    public void testStringss() {
+        //int tokenIdIndex = url.indexOf("tokenId=") + 8;
+        //String firstUrl = url.substring(0, tokenIdIndex);
+        //System.out.println((tokenIdIndex + needReplace.length()) +  "  " + url.length());
+        //String endUrl = url.substring(tokenIdIndex + needReplace.length(), url.length());
+        //System.out.println(firstUrl + needReplace + endUrl);
+        //String url = "http://192.168.100.224:8085/ezsonar/apm/apps?tokenId=6c95d62e-e45f-4598-b0d6-12ccdcacc662";
+        String url = "apps?tokenId=6c95d62e-e45f-4598-b0d6-12ccdcacc662";
+        String needReplace = "6c99ws2e-j41f-tg98-c3d6-xc34dcaccbgt";
+
+
     }
 
     @Test
