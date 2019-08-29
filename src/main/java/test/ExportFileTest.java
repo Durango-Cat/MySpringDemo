@@ -501,7 +501,7 @@ public class ExportFileTest {
      * @param fileExtension     文件后缀名
      * @return     文件是否创建成功
      */
-    private static boolean judgeFileExists(String fileName, File file, File filePath, String fileExtension) {
+    public static boolean judgeFileExists(String fileName, File file, File filePath, String fileExtension) {
         Boolean successOperation = true;
 
         // 如果文件不存在，则新建一个
