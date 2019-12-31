@@ -14,7 +14,9 @@ package main.java.jvm.classloader;
  * ldc表示将int, float或是String类型的常量值从常量池中推送至栈顶（就是马上要用到的）
  * bipush 表示将单字节(-128 ~ 127)的常量值推送到栈顶
  * sipush 表示将一个短整型的常量值（-32768~32767）推送至栈顶  短整型如果在-128~127范围内就是bipush超过了就是sipush
- * iconst_1 将int型的1推送到栈顶   也会有iconst_2 ~ iconst_5  最多就到5
+ * iconst_1 将int型的1推送到栈顶   也会有iconst_m1 ~ iconst_5 从-1 最多就到5
+ * 可以在引用的1.8 rt.jar包里看到这些定义的常量, Constants类里面 ICONST_1这些常量写的很清楚
+ *  还有相应的类进行实现，比如这儿看到的iconst就有ICONST 看这些包名就 能发现internal 就是内部用的，本来这些是apache基金协会提供的，只不过后面sun公司引用了
  *
  * @author zhuqp on 2019/12/29
  */
