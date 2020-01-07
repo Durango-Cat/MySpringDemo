@@ -41,6 +41,12 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
     }
 
 
+    @Override
+    public Class findClass(String classLoaderName) {
+        byte[] datas = loadClassData(classLoaderName);
+        return defineClass(classLoaderName, datas, 0, datas.length);
+    }
+
     private byte[] loadClassData(String binaryName) {
         byte[] bytes = null;
         ByteArrayOutputStream baos = null;
@@ -48,18 +54,46 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
 
         try {
             //此处将classLoaderName里面的 . 转换成 / (windows要转换成//)
+//            binaryName = binaryName.replace(".", "//");
             this.classLoaderName = this.classLoaderName.replace(".", "//");
             is = new FileInputStream(new File(binaryName + this.classLoaderNameSuffix));
             baos = new ByteArrayOutputStream();
             int ch = 0;
             while(-1 != (ch = is.read())) {
-                baos.write();
+                baos.write(ch);
+            }
+            bytes = baos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(is != null) {
+                try {
+                    is.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            if(baos != null) {
+                try {
+                    baos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        return bytes;
     }
 
+    public static void main(String[] args) throws Exception {
+        SubClassLoaderBySeeAfterVideo subClassLoaderBySeeAfterVideo = new SubClassLoaderBySeeAfterVideo("load1");
+        test(subClassLoaderBySeeAfterVideo);
+    }
 
+    public static void test(ClassLoader classLoader) throws Exception {
+        Class<?> clazz = classLoader.loadClass("main.java.jvm.classloader.AddFinalToParamTest");
+
+        Object obj = clazz.newInstance();
+        System.out.println(obj);
+    }
 }
