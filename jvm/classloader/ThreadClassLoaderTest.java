@@ -16,7 +16,7 @@ public class ThreadClassLoaderTest {
 
         System.out.println(classLoader);
 
-        String resourceClassName = "main/java/jvm/classloader/ClassLoaderBySystemAndParentsTest.class";
+        String resourceClassName = "classloader/ClassLoaderBySystemAndParentsTest.class";
 
         Enumeration<URL> resources = classLoader.getResources(resourceClassName);
         while(resources.hasMoreElements()) {

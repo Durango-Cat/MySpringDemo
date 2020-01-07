@@ -40,11 +40,19 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
         this.classLoaderName = classLoaderName;
     }
 
-
+    /**
+     * 这个方法的主要作用，就是通过参数中的二进制名字 得到对应的类对象
+     *
+     * 最重要的就是实现这个findClass方法，本类中的测试方法中并没有直接调用findClass
+     * 而是调用loadClass，在父类loadClass中会寻找子类实现的findClass方法，等于间接的被调用了。
+     *
+     * @param binaryName    字符串类型的"."拼接的二进制名字
+     * @return
+     */
     @Override
-    public Class findClass(String classLoaderName) {
-        byte[] datas = loadClassData(classLoaderName);
-        return defineClass(classLoaderName, datas, 0, datas.length);
+    public Class findClass(String binaryName) {
+        byte[] datas = loadClassData(binaryName);
+        return defineClass(binaryName, datas, 0, datas.length);
     }
 
     private byte[] loadClassData(String binaryName) {
@@ -55,10 +63,10 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
         try {
             //此处将classLoaderName里面的 . 转换成 / (windows要转换成//)
 //            binaryName = binaryName.replace(".", "//");
-            this.classLoaderName = this.classLoaderName.replace(".", "//");
+//            this.classLoaderName = this.classLoaderName.replace(".", "//");
             is = new FileInputStream(new File(binaryName + this.classLoaderNameSuffix));
             baos = new ByteArrayOutputStream();
-            int ch = 0;
+            int ch;
             while(-1 != (ch = is.read())) {
                 baos.write(ch);
             }
@@ -91,6 +99,7 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
     }
 
     public static void test(ClassLoader classLoader) throws Exception {
+        //用了父类的loadClass方法
         Class<?> clazz = classLoader.loadClass("main.java.jvm.classloader.AddFinalToParamTest");
 
         Object obj = clazz.newInstance();
