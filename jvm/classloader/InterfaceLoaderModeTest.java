@@ -1,7 +1,5 @@
 package main.java.jvm.classloader;
 
-import java.util.Random;
-
 /**
  * 接口和父接口初始化和加载 的测试类
  *
