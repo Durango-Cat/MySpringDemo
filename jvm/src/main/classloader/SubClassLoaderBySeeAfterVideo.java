@@ -69,6 +69,12 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
         return clazz;
     }
 
+    /**
+     * 这个方法时主要实现的方法，根据binaryName就是从磁盘上去加载这个class文件，并把里面的内容转换成byte[]数组加载到内存中。
+     * 这个byte[]就是加载到的类信息
+     * @param binaryName
+     * @return
+     */
     private byte[] loadClassData(String binaryName) {
         byte[] bytes = null;
         ByteArrayOutputStream baos = null;
