@@ -1,4 +1,4 @@
-package main.java.jvm.classloader;
+package main.classloader;
 
 /**
  * 单例类加载的模式

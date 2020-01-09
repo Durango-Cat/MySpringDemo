@@ -1,4 +1,4 @@
-package main.java.jvm.classloader;
+package main.classloader;
 
 /**
  * 测试类中加final的常量，类启动时的情况

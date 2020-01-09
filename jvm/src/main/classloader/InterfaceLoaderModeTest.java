@@ -1,4 +1,4 @@
-package main.java.jvm.classloader;
+package main.classloader;
 
 /**
  * 接口和父接口初始化和加载 的测试类

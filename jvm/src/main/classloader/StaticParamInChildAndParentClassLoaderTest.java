@@ -1,4 +1,4 @@
-package main.java.jvm.classloader;
+package main.classloader;
 
 /**
  * 父子类中的静态变量和静态代码块的加载顺序测试类

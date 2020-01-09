@@ -10,13 +10,4 @@ public interface InnerClassInInterfaceTest {
 
     void howhy();
 
-    class Test implements InnerClassInInterfaceTest {
-        public void howhy() {
-            System.out.println("Test内部类实现了howhy方法");
-        }
-
-        public static void main(String[] args) {
-            new Test().howhy();
-        }
-    }
 }

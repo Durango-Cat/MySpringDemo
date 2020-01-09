@@ -1,4 +1,4 @@
-package main.java.jvm.constantpool;
+package main.constantpool;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package main.java.jvm.classloader;
+package main.classloader;
 
 /**
  * 测试当前类的系统类加载器，以及系统类加载器的父类加载器信息
