@@ -127,20 +127,32 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
         subClassLoader1BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
         testByDelteTargetClass(subClassLoader1BySeeAfterVideo);
 
-        //删掉对应class后，继续加载 (这种情况就不会再继续加载，因为用的父类加载器都是一个）
-        SubClassLoaderBySeeAfterVideo subClassLoader2BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo(subClassLoader1BySeeAfterVideo, "load2");
-        subClassLoader2BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
-        testByDelteTargetClass(subClassLoader2BySeeAfterVideo);
-
-        //删掉对应class后，继续加载 (这种情况就不会再继续加载，因为用的父类加载器都是一个）
-        SubClassLoaderBySeeAfterVideo subClassLoader4BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo(subClassLoader2BySeeAfterVideo, "load2");
-        subClassLoader4BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
-        testByDelteTargetClass(subClassLoader4BySeeAfterVideo);
+        ////删掉对应class后，继续加载 (这种情况就不会再继续加载，因为用的父类加载器都是一个）
+        //SubClassLoaderBySeeAfterVideo subClassLoader2BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo(subClassLoader1BySeeAfterVideo, "load2");
+        //subClassLoader2BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
+        //testByDelteTargetClass(subClassLoader2BySeeAfterVideo);
+        //
+        ////删掉对应class后，继续加载 (这种情况就不会再继续加载，因为用的父类加载器都是一个）
+        //SubClassLoaderBySeeAfterVideo subClassLoader4BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo(subClassLoader2BySeeAfterVideo, "load2");
+        //subClassLoader4BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
+        //testByDelteTargetClass(subClassLoader4BySeeAfterVideo);
 
         //如果写成创建一个 那么类加载器优惠重新加载下这个类，说明这样创建的话，虽然都是用的这个类，但是得到的命名空间是不一样的，很奇怪吧
-        SubClassLoaderBySeeAfterVideo subClassLoader3BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo("load1");
-        subClassLoader3BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
-        testByDelteTargetClass(subClassLoader3BySeeAfterVideo);
+        //SubClassLoaderBySeeAfterVideo subClassLoader3BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo("load1");
+        //subClassLoader3BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
+        //testByDelteTargetClass(subClassLoader3BySeeAfterVideo);
+
+        //此处看下类卸载的情况,在启动配置上加一个jvm参数 -XX:+TraceClassUnLoading，
+        //打印的信息中在两个类加载时，有一个[Unloading class main.classloader.AddFinalToParamTest 0x00000007c006c028]
+        //如果把这个置空的代码注释掉，此处即使执行gc也不会真的卸载掉该类，因为它下面检测到还有引用的
+        //subClassLoader1BySeeAfterVideo = null;
+        //System.gc();
+
+        subClassLoader1BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo("load1");
+        subClassLoader1BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
+        testByDelteTargetClass(subClassLoader1BySeeAfterVideo);
+        //还有一种情况就是在这个对象不再引用的时候，给显示gc一下，因为它下面检测不到有东西在引用这个对象了，但是注掉这个gc就不会有类卸载了。
+        //System.gc();
     }
 
     public static void test(ClassLoader classLoader) throws Exception {
