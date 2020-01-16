@@ -123,6 +123,7 @@ public class SubClassLoaderBySeeAfterVideo extends ClassLoader {
         //test(subClassLoaderBySeeAfterVideo);
 
         //删掉对应class后，继续加载
+        //此处为啥是两个不一样的对象，因为这个属于两个不同的命名空间
         SubClassLoaderBySeeAfterVideo subClassLoader1BySeeAfterVideo = new SubClassLoaderBySeeAfterVideo("load1");
         subClassLoader1BySeeAfterVideo.setPath("/Users/zhuqiuping/test/");
         testByDelteTargetClass(subClassLoader1BySeeAfterVideo);
