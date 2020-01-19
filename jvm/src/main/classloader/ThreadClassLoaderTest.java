@@ -1,5 +1,7 @@
 package main.classloader;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -10,6 +12,11 @@ import java.util.Enumeration;
  * @author Zhuqiuping on 2020/1/3
  */
 public class ThreadClassLoaderTest {
+
+    @Test
+    public void testParentClassLoader() {
+
+    }
 
     public static void main(String[] args) throws IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
