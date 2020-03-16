@@ -1,13 +1,17 @@
 package main.java.yinlianguoji.test;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author ZhuQiuPing
@@ -31,8 +35,16 @@ public class TestFile {
 
     @Test
     public void testTwo() {
-        Object to = (int)1540954847;
-        System.out.println((long) to);
+        //Object to = (int)1540954847;
+        String path = "/Users/zhuqiuping";
+        File file = new File(path);
+        System.out.println(file.isDirectory());
+        File[] files = file.listFiles();
+        for(File fileTemp : files) {
+            System.out.println(fileTemp.getPath());
+            //System.out.println(fileTemp.getName());
+        }
+        //System.out.println((long) to);
     }
 
     @Test
@@ -195,6 +207,30 @@ public class TestFile {
 
     @Test
     public void testFile() {
+        String fileName = "conf.properties.json";
+        String filePath = "/Users/zhuqiuping/java/IdeaWorkSpace/branches/" +
+                "huangHeNongShangHang/dev/src/main/webapp/screensLauncher/" +
+                "realTimeTransaction/conf/conf.properties.json";
 
+        File file = new File(filePath);
+        if(!file.exists()) {
+            System.out.println("读取文件失败了");
+        }
+        String json = readFile(filePath);
+        JSONObject data = JSON.parseObject(json);
+
+    }
+
+    private static String readFile(String path) {
+        StringBuilder stb = new StringBuilder();
+        try (Scanner scanner = new Scanner(new File(path), StandardCharsets.UTF_8.name())) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                stb.append(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stb.toString();
     }
 }

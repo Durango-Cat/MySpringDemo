@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -23,6 +22,17 @@ public class StringTest {
 
     @Test
     public void testOne() {
+        //String str;
+        //str += "23";
+
+        //String change = "ezsonar_2019-09-29-01";
+        //System.out.println(change.substring(0, change.lastIndexOf("-")));
+        //int size = 5;
+        //size = (size + size) >> 1;
+        //System.out.println(size);
+
+        //String[] str = {};
+        //System.out.println(str.length);
         //String str = " 232  32323     ";
         //System.out.println(str.trim());
         //List<String> list = Lists.newArrayList("WEDQWED", "2121", "434323", "121454", "ewwdea", "adWED ");
@@ -39,19 +49,24 @@ public class StringTest {
         //int index = jump.indexOf(".");
         //System.out.println(Integer.parseInt(jump.substring(0,index)));
 
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -3);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String beforeThreeDaysTime = simpleDateFormat.format(new Date(cal.getTimeInMillis())) + " 23:00:00";
-        //三天前23点的时间戳
-        try {
-            Long time = simpleDateFormat.parse(beforeThreeDaysTime).getTime();
-            System.out.println(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //Calendar cal = Calendar.getInstance();
+        //cal.add(Calendar.DATE, -3);
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //String beforeThreeDaysTime = simpleDateFormat.format(new Date(cal.getTimeInMillis())) + " 23:00:00";
+        ////三天前23点的时间戳
+        //try {
+        //    Long time = simpleDateFormat.parse(beforeThreeDaysTime).getTime();
+        //    System.out.println(time);
+        //} catch (ParseException e) {
+        //    e.printStackTrace();
+        //}
 
         //System.out.println(DataType.ALL_INFO.toString());
+
+        String str = "null,454545";
+        String[] xsxs = str.split(",");
+        String xx = xsxs[0];
+        System.out.println(xx);
     }
 
     @Test
@@ -163,17 +178,58 @@ public class StringTest {
     }
 
     @Test
+    public void testIntegerMax() {
+        Integer int123 = new Integer(123);
+        int er3 = 123;
+
+        System.out.println(er3 == int123);
+
+        Integer int128 = new Integer(128);
+        Integer er8 = new Integer(128);
+        System.out.println(er8 == int128);
+        System.out.println(int128.equals(er8));
+    }
+
+    @Test
     public void testEight() {
-        String test = "xsxsxs";
-        String xx = null;
+        long timeLength = (1573660740L - 1573401600) / 86400L;
+        System.out.println(timeLength);
+        System.out.println(timeLength * 3370);
+
+        //System.out.println(10<<<3);
+        //Number ss = new Double(234243.23);
+        //System.out.println(ss.toString());
+        //String test = "xsxsxs";
+        //String xx = null;
         //if(xx.equals(test)) {
         //    System.out.println("xx is null");
         //}
         //else
 
           //equals后面的比较的为空时，查询的结果用为false
-            if(test.equals(xx)) {
-            System.out.println("test is not null");
+        //    if(test.equals(xx)) {
+        //    System.out.println("test is not null");
+        //}
+    }
+
+    @Test
+    public void testNine() {
+        String[] xxx = new String[10];
+        for(int i = 0; i < 10; i++) {
+            if(i == 5) {
+                xxx[i] = "5";
+                System.out.println(xxx[i] + "~~~~~~");
+                continue;
+            }
+
+            if(Strings.isNullOrEmpty(xxx[i])) {
+                System.out.println(xxx[i]);
+            }
+        }
+        System.out.println();
+
+        for(int i = 0; i < 10; i++) {
+            System.out.println(xxx[i] + "\t");
         }
     }
 
@@ -472,5 +528,35 @@ public class StringTest {
         }
     }
 
+    @Test
+    public void testSwithCase() {
+        String type = null;
+        switch (type) {
+            case "123":
+                System.out.println("嘿嘿");
+                break;
+                default:
+                    System.out.println("哈哈");
+                    break;
+        }
+
+    }
+
+    @Test
+    public void testZhengze() {
+        String xx = "^(?![a-z]+$)(?![A-Z]+$)(?!\\d+$)(?![~!#^&*()+$@%_]+$)";
+
+    }
+
+    @Test
+    public void test() {
+        String indexPrefixAndSuffix = "2020-01-06-18";
+        SimpleDateFormat hourDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH");
+        String todayHour = hourDateFormat.format(new Date());
+        System.out.println(todayHour);
+        int xxx = (indexPrefixAndSuffix.compareTo(todayHour));
+        System.out.println(xxx);
+        System.out.println(xxx <= 0);
+    }
 
 }

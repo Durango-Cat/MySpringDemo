@@ -1,7 +1,11 @@
 package main.java.test;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.xssf.usermodel.*;
 
@@ -39,39 +43,88 @@ public class ExportFileTest {
     public static void main(String[] args) {
 
         //遍历流信息，封装流对应的路径名信息集合
-        Map<String, String> streamIdAndTopoNamesMap = Maps.newLinkedHashMap();
-        streamIdAndTopoNamesMap.put("123123123123", "业务路径1-1,业务路径1-2");
-        streamIdAndTopoNamesMap.put("765432345666", "业务路径2-1,业务路径2-2");
-        streamIdAndTopoNamesMap.put("765445654343", "业务路径3-1,业务路径3-2");
-        streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2,业务路径4-3,业务路径4-4,4343434,344345345345,345345345345,3453523523,353523242,2342523452");
-        //streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2");
-        streamIdAndTopoNamesMap.put("876578345432", "业务路径5-1,业务路径5-2");
-        streamIdAndTopoNamesMap.put("213432421234", "业务路径6-1,业务路径6-2");
+        //Map<String, String> streamIdAndTopoNamesMap = Maps.newLinkedHashMap();
+        //streamIdAndTopoNamesMap.put("123123123123", "业务路径1-1,业务路径1-2");
+        //streamIdAndTopoNamesMap.put("765432345666", "业务路径2-1,业务路径2-2");
+        //streamIdAndTopoNamesMap.put("765445654343", "业务路径3-1,业务路径3-2");
+        //streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2,业务路径4-3,业务路径4-4,4343434,344345345345,345345345345,3453523523,353523242,2342523452");
+        ////streamIdAndTopoNamesMap.put("454353234532", "业务路径4-1,业务路径4-2");
+        //streamIdAndTopoNamesMap.put("876578345432", "业务路径5-1,业务路径5-2");
+        //streamIdAndTopoNamesMap.put("213432421234", "业务路径6-1,业务路径6-2");
 
         //导出文件的文件夹地址
-        String exportDirectory = "/Users/zhuqiuping/java/test";
-        //导出的文件名上要包括导出的日期
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        String fileName = simpleDateFormat.format(new Date()) + "=-+-_";
-        fileName = fileName.replace("?", " ");
-        fileName = fileName.replace("/", " ");
-        fileName = fileName.replace("*", " ");
-        fileName = fileName.replace("[", " ");
-        fileName = fileName.replace("]", " ");
-        switch (exportFileExtension) {
-            case XLSX_FILE_EXTENSION:
-                //导出xlsx可以分为有Response方式（网页请求，里面分为get请求和post请求两种方式）和无Response方式。
-                writeXlsxNoResponse(exportDirectory, fileName, streamIdAndTopoNamesMap);
-                break;
-            case CSV_FILE_EXTENSION:
-                writeCsv(exportDirectory, fileName, streamIdAndTopoNamesMap);
-                break;
-            default:
-                Gson gson = new Gson();
-                String json = gson.toJson(streamIdAndTopoNamesMap);
-                writeJson(exportDirectory, fileName, json);
-                break;
+        String exportDirectory = "/Users/zhuqiuping/test/topos.xls";
+        InputStream inputStream = null;
+        Map<String, String> topoNameByTwoSystem = Maps.newHashMap();
+        try {
+            inputStream = new FileInputStream(exportDirectory);
+            HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+            //获取xlsx里面的sheet页数，如果sheet页不是3个，就提示报错
+            int sheetIndexNumber = workbook.getNumberOfSheets();
+            if (sheetIndexNumber != 3) {
+                throw new IOException("传入的excel的sheet页不足三个！");
+            }
+            HSSFSheet sheet = workbook.getSheetAt(2);
+            if (sheet == null) {
+                throw new IOException("传入的excel的第三个sheet页有误！");
+            }
+            for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+                HSSFRow row = sheet.getRow(rowNum);
+                System.out.println("row:"+ row);
+                //被同步的路径名称
+                HSSFCell firstCell = row.getCell(0);
+                String firstValue = "";
+                if (firstCell != null) {
+                    firstValue = firstCell.getStringCellValue();
+                }
+                System.out.println(firstCell);
+                //同步的路径名称
+                HSSFCell secondCell = row.getCell(1);
+                String secondValue = "";
+                if (secondCell != null) {
+                    secondValue = secondCell.getStringCellValue();
+                }
+                if (Strings.isNullOrEmpty(secondValue)) {
+                    continue;
+                }
+                System.out.println(secondValue);
+            }
+        } catch (FileNotFoundException e) {
+            //LOG.error("读取的xlsx文件不存在", e);
+        } catch (IOException e) {
+            //LOG.error(e.getMessage(), e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    //LOG.error("读取的xlsx文件中关闭输入流出现异常", e);
+                }
+            }
         }
+
+        //导出的文件名上要包括导出的日期
+        //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        //String fileName = simpleDateFormat.format(new Date()) + "=-+-_";
+        //fileName = fileName.replace("?", " ");
+        //fileName = fileName.replace("/", " ");
+        //fileName = fileName.replace("*", " ");
+        //fileName = fileName.replace("[", " ");
+        //fileName = fileName.replace("]", " ");
+        //switch (exportFileExtension) {
+        //    case XLSX_FILE_EXTENSION:
+        //        //导出xlsx可以分为有Response方式（网页请求，里面分为get请求和post请求两种方式）和无Response方式。
+        //        writeXlsxNoResponse(exportDirectory, fileName, streamIdAndTopoNamesMap);
+        //        break;
+        //    case CSV_FILE_EXTENSION:
+        //        writeCsv(exportDirectory, fileName, streamIdAndTopoNamesMap);
+        //        break;
+        //    default:
+        //        Gson gson = new Gson();
+        //        String json = gson.toJson(streamIdAndTopoNamesMap);
+        //        writeJson(exportDirectory, fileName, json);
+        //        break;
+        //}
     }
 
     /**
