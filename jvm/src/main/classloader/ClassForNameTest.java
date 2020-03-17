@@ -1,4 +1,4 @@
-package main.java.jvm.classloader;
+package main.classloader;
 
 /**
  * 测试下ClassLoader里面的loadClass、Class.forName是否会主动加载类

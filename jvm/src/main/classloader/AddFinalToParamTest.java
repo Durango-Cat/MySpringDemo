@@ -5,7 +5,7 @@ package main.classloader;
  *
  * 解释：常量在编译阶段会存入到调用这个常量的方法所在的类的常量池中，
  *       本质上，调用类并没有直接引用到定义常量的类，因此并不会触发定义常量的类的初始化
- * 注意：这里指的是常量存放到了AddFinalToPararmTest的常量池中，之后AddFinalToPararmTest与
+ * 注意：这里指的是常量存放到了AddFinalToParamTest的常量池中，之后AddFinalToParamTest与
  * MyFinalParent2就没有任何关系了。甚至，可以将MyFinalParent2的class文件删除
  * 删除方法：此项目编译完后 会把class文件都放到了out文件夹下面
  *   在out文件夹下找到java.jvm.jvmparam文件夹下的MyFinalParent2.class删除掉程序还是可以正常执行
@@ -16,7 +16,8 @@ package main.classloader;
  * sipush 表示将一个短整型的常量值（-32768~32767）推送至栈顶  短整型如果在-128~127范围内就是bipush超过了就是sipush
  * iconst_1 将int型的1推送到栈顶   也会有iconst_m1 ~ iconst_5 从-1 最多就到5
  * 可以在引用的1.8 rt.jar包里看到这些定义的常量, Constants类里面 ICONST_1这些常量写的很清楚
- *  还有相应的类进行实现，比如这儿看到的iconst就有ICONST 看这些包名就 能发现internal 就是内部用的，本来这些是apache基金协会提供的，只不过后面sun公司引用了
+ *  还有相应的类进行实现，比如这儿看到的iconst就有ICONST 看这些包名就 能发现internal 就是内部用的，
+ * 本来这些是apache基金协会提供的，只不过后面sun公司引用了
  *
  * @author zhuqp on 2019/12/29
  */
