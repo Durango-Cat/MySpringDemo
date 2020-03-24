@@ -2,6 +2,7 @@ package main.java.localtimemodel;
 
 
 import com.google.common.collect.Lists;
+import main.java.utils.TimesUtils;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -35,7 +36,10 @@ public class TimeTest {
 //            System.out.println(hashMap.get(key));
 //        });
 
-        System.out.println(zeroTime(System.currentTimeMillis()));
+        long millis = System.currentTimeMillis();
+        System.out.println(getStartTime(millis));
+        System.out.println("endTime : " + getEndTime(millis));
+        //System.out.println(zeroTime(System.currentTimeMillis()));
     }
 
     private static Long zeroTime(Long time) {
@@ -47,6 +51,36 @@ public class TimeTest {
         cal.set(Calendar.MILLISECOND, 0);
         cal.add(Calendar.DAY_OF_YEAR, 1);
         return cal.getTime().getTime() / 1000;
+    }
+
+    private static int getStartTime(long millis) {
+        Calendar start = Calendar.getInstance();
+        start.setTimeInMillis(millis);
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+        start.set(Calendar.MILLISECOND, 0);
+        start.add(Calendar.DATE, -1);
+        Double from = TimesUtils.getUTCTimestampWithMilliseconds(start.getTime().getTime());
+        return from.intValue();
+    }
+
+    /**
+     * 根据当前世界获取同步Mapping最晚的时间
+     * 默认查询现在至头一天00:00的Mapping
+     *
+     * @param millis millis
+     * @return (s)
+     */
+    private static int getEndTime(long millis) {
+        Calendar start = Calendar.getInstance();
+        start.setTimeInMillis(millis);
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.SECOND, 0);
+        start.set(Calendar.MILLISECOND, 0);
+        Double from = TimesUtils.getUTCTimestampWithMilliseconds(start.getTime().getTime());
+        return from.intValue();
     }
 
     @Test
