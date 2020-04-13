@@ -7,6 +7,8 @@ package main.classloader;
  * 但真正的结果：只打印了MyParent6
  * 为啥：因为MyChild6 和 MyParent6之间是子父关系，虽然是用子类.父类静态变量的方式或者子类.父类静态方法，
  * 但是终究是主动加载的父类，跟子类没有啥关系，就是没有牵扯到子类的主动加载更不用说初始化了。不看调用方是谁，只看最终调用的类
+ *
+ * 视频里有说：只有当程序访问的静态变量或静态方法确实在当前类或当前接口中定义时，才可以认为是对类或者接口的主动使用
  * @author zhuqp on 2020/1/2
  */
 public class StaticParamInChildAndParentClassLoaderTest {

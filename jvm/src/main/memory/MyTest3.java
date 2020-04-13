@@ -3,6 +3,7 @@ package main.memory;
 /**
  * jconsole或者jvisualvm  检测死锁
  *
+ * 设置最大的元空间大小是200M
  * @author Zhuqiuping on 2020/3/30
  */
 public class MyTest3 {
