@@ -63,11 +63,25 @@ public class StringTest {
 
         //System.out.println(DataType.ALL_INFO.toString());
 
-        String str = "null,454545";
-        String[] xsxs = str.split(",");
-        String xx = xsxs[0];
-        System.out.println(xx);
+        //String str = "null,454545";
+        //String[] xsxs = str.split(",");
+        //String xx = xsxs[0];
+        String xxx = trimZero("434.00030");
+        System.out.println(xxx);
+        xxx = trimZero("434.0");
+        System.out.println(xxx);
     }
+
+    private String trimZero(String s) {
+        if (s.indexOf(".") > 0) {
+            // 去掉多余的0
+            s = s.replaceAll("0+?$", "");
+            // 如最后一位是.则去掉
+            s = s.replaceAll("[.]$", "");
+        }
+        return s;
+    }
+
 
     @Test
     public void testTwo() {

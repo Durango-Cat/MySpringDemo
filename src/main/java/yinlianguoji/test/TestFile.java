@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -22,6 +24,51 @@ public class TestFile {
      * 读取文件时的编码
      */
     private static final String charset = "gb2312";
+
+    @Test
+    public void testDirsAndFiles() {
+        File precastLibraryDirs = new File("/Users/zhuqiuping/test1");
+        if(precastLibraryDirs.isFile()) {
+            System.out.println("not directory");
+        } else if(precastLibraryDirs.isDirectory()) {
+            File[] files = precastLibraryDirs.listFiles();
+
+            if(files.length > 0) {
+                List<Map<String, Object>> dataList = Lists.newArrayList();
+                for(File file : files) {
+                    Map<String, Object> ptypeAndTagMap = Maps.newHashMap();
+                    String name = file.getName();
+                    if(!file.isDirectory()) {
+                        continue;
+                    }
+
+                    List<Map<String, Object>> tagList = Lists.newArrayList();
+                    String[] subFiles = file.list();
+                    for (String tag : subFiles) {
+                        Map<String, Object> tagMap = Maps.newHashMap();
+                        String[] points = tag.split("\\.");
+                        tag = points[0];
+                        String[] productAndVendors = tag.split("_");
+                        String product = productAndVendors[1];
+
+                        if ("default".equals(product) && "default".equals(name)) {
+                            tagMap.put("name", product);
+                            tagList.add(tagMap);
+                            break;
+                        } else {
+                            tagMap.put("name", product + "_" + productAndVendors[2]);
+                            tagMap.put("total", productAndVendors[3]);
+                            tagList.add(tagMap);
+                        }
+                    }
+                    ptypeAndTagMap.put("name", name);
+                    ptypeAndTagMap.put("data", tagList);
+                    dataList.add(ptypeAndTagMap);
+                }
+                System.out.println(dataList);
+            }
+        }
+    }
 
     @Test
     public void testOne() {
